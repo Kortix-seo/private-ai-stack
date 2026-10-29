@@ -1,0 +1,55 @@
+# The parts of a private AI stack that are not the operating system.
+#
+# Kortix itself installs with `kortix self-host init` and runs its own compose
+# project. This file starts the two services an agent needs beside it: a model
+# runner and a vector store. Both bind to 127.0.0.1 so nothing is published to
+# the network by default.
+name: private-ai-stack
+
+services:
+  models:
+    image: ollama/ollama:0.6.8
+    container_name: private-ai-models
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:11434:11434"
+    environment:
+      OLLAMA_KEEP_ALIVE: "${MODEL_KEEP_ALIVE:-30m}"
+    volumes:
+      - model-weights:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  # Pulls the model named in .env once, then exits. Re-run with
+  # `docker compose run --rm models-pull` after changing MODEL_NAME.
+  models-pull:
+    image: ollama/ollama:0.6.8
+    depends_on:
+      models:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: "http://models:11434"
+      MODEL_NAME: "${MODEL_NAME:-llama3.1:8b}"
+    entrypoint: ["/bin/sh", "-c", "ollama pull \"$$MODEL_NAME\""]
+    restart: "no"
+
+  vectors:
+    image: qdrant/qdrant:v1.12.5
+    container_name: private-ai-vectors
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - vector-data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  model-weights:
+  vector-data:
