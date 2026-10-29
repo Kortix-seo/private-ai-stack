@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://kortix.com/schema/kortix.v3.schema.json
+#
+# The manifest at the root of a Kortix project. This is the file that owns what
+# no project in the open-source stack owns: the rules, the approvals and the
+# record. Every change to it is a change request a person reviews.
+#
+# Validate with `kortix validate` after editing. Connector policy rules are not
+# checked by validate; a malformed rule is reported as a connector sync error.
+kortix_version: 3
+default_agent: private-ai-ops
+
+# Rules that apply to every agent in the project, before an agent's own policy
+# set and before a connector's base rules.
+policy:
+  # allow_all (the platform default) runs every call. risk runs a read and holds
+  # a write or a delete for approval. Set it on purpose, and read the diff.
+  default_mode: risk
+  policies:
+    - match: "*.delete_*"
+      action: block
+    - match: "*.send_*"
+      action: require_approval
+      conditions:
+        - arg: to
+          match: "*@your-company.example"
+          negate: true
+
+# How long a held call waits before it expires. Kortix clamps 5m-30d.
+approvals:
+  ttl: 4h
+
+connectors:
+  # The credentials live in Kortix and never enter the machine. Replace this
+  # example with the systems your team actually lets an agent reach, and keep
+  # the policies beside it.
+  - slug: crm
+    provider: composio
+    app: hubspot
+    policies:
+      - match: "*.export_*"
+        action: require_approval
+
+agents:
+  private-ai-ops:
+    description: Runs the private-AI operations work the team hands over, and stops at every gate the manifest sets.
+    mode: primary
+    prompt_file: agents/private-ai-ops.md
+    permission:
+      bash:
+        "*": ask
+        "git status*": allow
+        "git log*": allow
+        "git diff*": allow
+    skills: all
+    connectors: [crm]
+    workspace: { project_repository: true }
