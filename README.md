@@ -12,7 +12,7 @@ execution agent — and none of those projects claims to police what an agent
 may touch or to keep a record that survives an audit. Those two things have to
 live somewhere. Here they live in `kortix.yaml`.
 
-Kortix is the open-source AI Operating System: your agents, their skills, your
+Kortix is the open-source CompanyOS: your agents, their skills, your
 company memory, and every connector in one git repo you own, with the agents
 working on real cloud computers. Self-hosting is free, and the platform installs
 as one Docker Compose stack on a server you control.
@@ -24,7 +24,7 @@ as one Docker Compose stack on a server you control.
 | Model runner | `ollama` in `docker-compose.yml` (or point `MODEL_BASE_URL` at vLLM, LM Studio or a hosted endpoint) | Tokens only. No tools, no memory, no record. |
 | Retrieval | `qdrant` in `docker-compose.yml` | Documents and vectors. Nothing gates an action. |
 | Rules, approvals, memory and the record | `kortix.yaml` at the root of this repo, installed as a Kortix project | You set the gates, and you approve the work that reaches `main`. |
-| Agent work | Kortix sessions, each on its own isolated sandbox | The sandbox runs on the compute provider you configure, so the machine is rented even when the operating system is not. |
+| Agent work | Kortix sessions, each on its own isolated sandbox | The sandbox runs on the compute provider you configure, so the machine is rented even when the CompanyOS is not. |
 | Chat | The Kortix web app, or any front end you keep (Open WebUI, LibreChat) | A window is a window. The repository is where the work lives. |
 
 ## Quickstart
@@ -112,6 +112,9 @@ docs/03-faq.md            the questions this stack gets asked
 - [What private AI means for a business](https://privateaiforcompanies.com/what-is-private-ai-for-business)
 - [The open-source private AI stack and who owns its rules](https://privateaiforcompanies.com/open-source-private-ai-tools)
 - [Running AI agents privately](https://privateaiforcompanies.com/run-ai-agents-privately)
+- [Picking a private AI platform by its control plane](https://privateaiforcompanies.com/private-ai-platform)
+- [An open source private AI platform comparison you can test yourself](https://privateaiforcompanies.com/private-ai-platform-comparison)
+- [Private AI with approvals and an audit trail](https://privateaiforcompanies.com/private-ai-with-approvals-and-audit)
 - [Self-hosting Kortix](https://privateaiforcompanies.com/self-hosting-kortix)
 - Kortix documentation: <https://kortix.com/docs/developers>
 

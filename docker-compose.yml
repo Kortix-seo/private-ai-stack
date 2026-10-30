@@ -1,4 +1,4 @@
-# The parts of a private AI stack that are not the operating system.
+# The parts of a private AI stack that are not the CompanyOS.
 #
 # Kortix itself installs with `kortix self-host init` and runs its own compose
 # project. This file starts the two services an agent needs beside it: a model
