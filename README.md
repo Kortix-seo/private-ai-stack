@@ -60,8 +60,9 @@ The full sequence, including what to do before the instance is reachable, is in
 
 ## The manifest is the point
 
-`kortix.yaml` in this repository is a working `kortix_version: 3` manifest. Two
-keys in it do the work no project in the stack does:
+`kortix.yaml` in this repository is a working manifest. The manifest format has
+no version line, so a `kortix_version` line left in an older project is dropped
+with a warning. Two keys in it do the work no project in the stack does:
 
 ```yaml
 policy:
