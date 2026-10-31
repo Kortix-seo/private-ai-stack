@@ -88,11 +88,16 @@ key. A self-hosted instance has no Kortix-managed models.
 1. Sign up at `https://<domain>` with an address in `KORTIX_PLATFORM_ADMIN_EMAILS`.
 2. Open `/admin/git` and create a GitHub App (recommended). Until it is set,
    Kortix cannot create project repositories.
-3. Create the team account, then a project, and point the project at this
-   repository (Import an existing repository).
+3. Create one project at `/new` on the account you signed up with, because the
+   menu that creates accounts lives inside a project. In it, open the project
+   menu → **Switch Project** → **Create an account…** to create the team account;
+   your sign-up account is personal, so it cannot hold SAML SSO, and a project
+   cannot move to another account. Then create the project your team will use in
+   the team account, and point it at this repository (**Import an existing
+   repository**).
 4. `kortix validate`, then push. `kortix.yaml` becomes the project's rules.
 
-## 6. Close sign-up before the instance is reachable
+## 6. Close sign-up once the admin and the team are in
 
 This is the step people skip, and it is the one that matters. A new instance
 confirms every sign-up without an email, so until you set one of these, anyone
@@ -116,7 +121,7 @@ kortix self-host doctor
 ```
 
 `doctor` exits 1 on `open-sign-up` while sign-up is open and email confirmation
-is off. Fix that before you point a real domain at the instance.
+is off, so a passing run is the proof that the door is closed.
 
 ## 7. What a backup has to contain
 
